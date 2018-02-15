@@ -13,4 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome');
+Route::view('/', 'welcome', ['expectations' => require(__DIR__.'/../../expectations/translation.expectation.php')]);
+Route::get('/lang/{locale}', function (string $locale) {
+    session()->put(
+        config('flipbox-sdk.modules.translation.session'),
+        $locale
+    );
+
+    return redirect()->back();
+});

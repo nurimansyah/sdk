@@ -1,6 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Feature\Tests;
+
+use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {

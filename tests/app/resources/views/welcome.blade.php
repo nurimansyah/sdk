@@ -38,10 +38,6 @@
                 top: 18px;
             }
 
-            .content {
-                text-align: center;
-            }
-
             .title {
                 font-size: 84px;
             }
@@ -59,21 +55,78 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .top-right a.active {
+                color: red;
+            }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                @php
+                    $sessionName = config('flipbox-sdk.modules.translation.session');
+                    $currentLocale = session($sessionName, config('app.locale', config('app.fallback_locale')));
+                @endphp
+                <div class="top-right links">
+                    <a
+                        dusk="en-link" href="{{ url('/lang/en') }}"
+                        active="{{ $currentLocale === 'en' ? 'yes' : 'no' }}"
+                        class="{{ $currentLocale === 'en' ? 'active' : '' }}"
+                    >
+                        EN
+                    </a>
+
+                    <a
+                        dusk="id-link" href="{{ url('/lang/id') }}"
+                        active="{{ $currentLocale === 'id' ? 'yes' : 'no' }}"
+                        class="{{ $currentLocale === 'id' ? 'active' : '' }}"
+                    >
+                        ID
+                    </a>
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="title m-b-md">
+                    Flipbox CMS SDK
+                </div>
+
+
+                <div class="directive-{{ $currentLocale }}">
+                    <h3>Directive: {{ $currentLocale }}</h3>
+
+                    <ul>
+                    @foreach ($expectations[$currentLocale] as $key => $result)
+                        @php
+                            $default = '';
+
+                            if (is_array($result)) {
+                                ['result' => $result, 'default' => $default] = $result;
+                            }
+                        @endphp
+
+                        <li key="{{ $key }}" default="{{ $default }}">@translate($key, $default)</li>
+                    @endforeach
+                    </ul>
+                </div>
+
+                <hr>
+
+                <div class="function-{{ $currentLocale }}">
+                    <h3>Function: {{ $currentLocale }}</h3>
+
+                    <ul>
+                    @foreach ($expectations[$currentLocale] as $key => $result)
+                        @php
+                            $default = '';
+
+                            if (is_array($result)) {
+                                ['result' => $result, 'default' => $default] = $result;
+                            }
+                        @endphp
+
+                        <li key="{{ $key }}" default="{{ $default }}">{{ translate($key, $default) }}</li>
+                    @endforeach
+                    </ul>
                 </div>
             </div>
         </div>

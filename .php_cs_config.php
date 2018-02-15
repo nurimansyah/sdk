@@ -5,8 +5,10 @@ use PhpCsFixer\Config;
 
 $finder = Finder::create()
     ->name('*.php')
-    ->in(__DIR__.DIRECTORY_SEPARATOR.'src')
-    ->in(__DIR__.DIRECTORY_SEPARATOR.'tests');
+    ->in(__DIR__.'/src')
+    ->in(__DIR__.'/tests')
+    ->exclude(__DIR__.'/tests/app/bootstrap/cache')
+    ->exclude(__DIR__.'/tests/app/storage/framework/views');
 
 return Config::create()
     ->setRules([

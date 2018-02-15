@@ -20,6 +20,6 @@ class Translation extends Model
      */
     public function getConnectionName()
     {
-        return config('flipbox-sdk.modules.translation.drivers.eloquent.connection');
+        return config('flipbox-sdk.modules.translation.drivers.eloquent.connection', 'cms');
     }
 }

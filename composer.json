@@ -16,6 +16,7 @@
     "require-dev": {
         "fideloper/proxy": "~3.3",
         "friendsofphp/php-cs-fixer": "^2.10",
+        "laravel/dusk": "~2.0.13",
         "laravel/tinker": "~1.0",
         "phpunit/phpunit": "~6.0"
     },
@@ -45,7 +46,6 @@
     },
     "scripts": {
         "test": "@php vendor/bin/phpunit",
-        "serve": "@php -S localhost:8000 -t tests/app/public",
         "fix": "@php vendor/bin/php-cs-fixer fix --config .php_cs_config.php --allow-risky yes"
     }
 }

@@ -13,7 +13,7 @@ class SDKServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    protected $defer = false;
 
     /**
      * Bootstrap any application services.
@@ -29,12 +29,14 @@ class SDKServiceProvider extends ServiceProvider
         );
 
         Blade::directive('translate', function ($expression) {
-            [$key, $default] = array_merge(
-                array_map('trim', explode(',', $expression, 2)),
-                ['', '']
+            [$key, $default, $locale] = array_merge(
+                array_map(function (string $string): string {
+                    return trim($string);
+                }, explode(',', $expression, 3)),
+                ['""', '""', '""']
             );
 
-            return "<?php echo e(translate('$key', '$default')); ?>";
+            return "<?php echo e(translate($key, $default, $locale)); ?>";
         });
     }
 
