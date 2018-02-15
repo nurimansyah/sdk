@@ -229,24 +229,9 @@ translate('auth.failed', 'Otentikasi gagal', 'id');
 Usage in Blade file using custom directive:
 
 ```
-@translate(auth.failed, Authentication failed)
-```
-
-When using custom directive, you **SHOULD NEVER** place a quote/double quote between arguments.
-
-```
-<!-- WRONG !!! -->
 @translate('auth.failed', 'Authentication failed')
-<!-- ALSO WRONG !!! -->
-@translate("auth.failed", "Authentication failed")
-```
-
-Also you CANNOT pass the third argument, the `locale`, when using custom directive.
-If you want to pass `locale` argument, use `translate` method.
-
-```
-<!-- LOCALE ARGUMENT IS NOT ACCEPTED !!! -->
-@translate(auth.failed, Authentication failed, en)
+@translate('auth.failed', 'Authentication failed', 'en)
+@translate('auth.failed', 'Otentikasi gagal', 'id')
 ```
 
 In addition, when using custom directive, any HTML tag will be encoded through PHP `htmlspecialchars` function.

@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Feature\Tests;
 
+use Tests\TestCase;
 use Flipbox\SDK\Factory;
 use Flipbox\SDK\Facades\SDK;
 use Flipbox\SDK\Modules\Translation\Module as TranslationModule;
