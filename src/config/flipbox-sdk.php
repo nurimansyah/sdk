@@ -19,5 +19,15 @@ return [
                 ],
             ],
         ],
+        'menu' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuation
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
     ],
 ];
