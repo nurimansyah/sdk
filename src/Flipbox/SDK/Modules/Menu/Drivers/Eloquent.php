@@ -20,9 +20,14 @@ class Eloquent implements MenuDriver
             $query->with(['children' => function($q) {
                 return $q->with('children');
             }]);
-        }])->whereNull('parent_id')->get();
+        }])
+        ->whereNull('parent_id')
+        ->whereHas('language', function ($query) {
+            return $query->where('key', 'id');
+        })
+        ->get();
         
-        return $collection->sortBy('sort')->toArray();
+        return $collection->toArray();
     }
 
     /**
@@ -33,20 +38,26 @@ class Eloquent implements MenuDriver
      */
     public function search($param = [])
     {
-        return MenuContent::whereHas('menu')->whereHas('language', function ($query) use ($param) {
+        $collection = MenuContent::with(['children' => function($query) {
+            $query->with(['children' => function($q) {
+                return $q->with('children');
+            }]);
+        }])
+        ->whereNull('parent_id')
+        ->whereHas('language', function ($query) use ($param) {
             if ($param['lang']) {
-                $query->where('key', $param['lang'])->where('label', '!=', null);
+                $query->where('key', $param['lang']);
             } else {
-                $query->where('key', 'id')->where('label', '!=', null);
+                $query->where('key', 'id');
             }
 
             if ($param['search']) {
-                $query->where('label', 'like', "%{$param['search']}%")
-                ->orWhere('url', 'like', "%{$param['search']}%");
+                $query->where('menu_contents.label', 'like', "%{$param['search']}%");
             }
-
             return $query;
-        })->get();
 
+        })->get();
+        
+        return $collection->toArray();
     }
 }
