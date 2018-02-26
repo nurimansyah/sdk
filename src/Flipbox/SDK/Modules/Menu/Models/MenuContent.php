@@ -2,7 +2,6 @@
 
 namespace Flipbox\SDK\Modules\Menu\Models;
 
-use URL;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -62,7 +61,7 @@ class MenuContent extends Model
         if ($this->attributes['type'] === 'external_link') {
             $data = $value;
         } else {
-            $data = URL::to($value);
+            $data = url($value);
         }
         return $data;
     }

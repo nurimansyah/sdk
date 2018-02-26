@@ -16,7 +16,7 @@ class Eloquent implements MenuDriver
      */
     public function all()
     {
-        return Menu::all();
+        return Menu::get()->toArray();
     }
 
     /**
