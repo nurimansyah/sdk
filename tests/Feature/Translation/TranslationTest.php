@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Tests;
+namespace Feature\Translation\Tests;
 
 use Tests\TestCase;
 use Flipbox\SDK\Factory;
@@ -159,7 +159,7 @@ class TranslationTest extends TestCase
 
     protected function getExpectations()
     {
-        return require __DIR__.'/../expectations/translation.expectation.php';
+        return require __DIR__.'/../../expectations/translation.expectation.php';
     }
 
     protected function checkTranslation(Module $module)
