@@ -37,6 +37,26 @@ class MenuContent extends Model
     }
 
     /**
+     * One to Many relation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function parent()
+    {
+        return $this->hasOne(self::class, 'id', 'parent_id')->orderBy('sort');
+    }
+
+    /**
+     * Make tree Menu.
+     *
+     * @return data type
+     */
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id')->orderBy('sort');
+    }
+
+    /**
      * Many to Many relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo

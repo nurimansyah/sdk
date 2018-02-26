@@ -16,7 +16,13 @@ class Eloquent implements MenuDriver
      */
     public function all()
     {
-        return Menu::get()->toArray();
+        $collection = MenuContent::with(['children' => function($query) {
+            $query->with(['children' => function($q) {
+                return $q->with('children');
+            }]);
+        }])->whereNull('parent_id')->get();
+        
+        return $collection->sortBy('sort')->toArray();
     }
 
     /**

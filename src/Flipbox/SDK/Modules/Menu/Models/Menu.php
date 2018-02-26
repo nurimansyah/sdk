@@ -35,24 +35,4 @@ class Menu extends Model
     {
         return $this->hasMany(MenuContent::class);
     }
-
-    /**
-     * One to Many relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function parent()
-    {
-        return $this->hasOne(self::class, 'id', 'parent_id')->orderBy('sort');
-    }
-
-    /**
-     * Make tree Menu.
-     *
-     * @return data type
-     */
-    public function children()
-    {
-        return $this->hasMany(self::class, 'parent_id', 'id')->orderBy('sort');
-    }
 }
