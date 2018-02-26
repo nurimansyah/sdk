@@ -67,3 +67,47 @@ if (!function_exists('searchMenu')) {
         return sdk('menu')->search($default);
     }
 }
+
+if (!function_exists('banner')) {
+    /**
+     * get all banner a key.
+     *
+     * @param string       $key
+     * @param string|array $default
+     * @param string       $locale
+     *
+     * @return string|array
+     */
+    function banner()
+    {
+        return sdk('banner')->all();
+    }
+}
+
+if (!function_exists('searchBanner')) {
+    /**
+     * search a all banner.
+     *
+     * @param string|array $default
+     *
+     * @return string|array
+     */
+    function searchBanner($default = null)
+    {
+        return sdk('banner')->search($default);
+    }
+}
+
+if (!function_exists('findBanner')) {
+    /**
+     * find by banner by parameter.
+     *
+     * @param string $findBanner
+     *
+     * @return object
+     */
+    function findBanner($param)
+    {
+        return sdk('banner')->find($param);
+    }
+}

@@ -17,6 +17,7 @@ class Factory implements ArrayAccess
     protected static $availableModules = [
         'translation' => Modules\Translation\Module::class,
         'menu' => Modules\Menu\Module::class,
+        'banner' => Modules\Banner\Module::class,
     ];
 
     /**

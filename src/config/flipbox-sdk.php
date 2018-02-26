@@ -29,5 +29,12 @@ return [
                 ],
             ],
         ],
+        'banner' => [
+            'drivers' => [
+                'eloquent' => [
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],  
+        ],
     ],
 ];
