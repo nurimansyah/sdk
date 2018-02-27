@@ -2,24 +2,37 @@
 
 namespace Flipbox\SDK\Modules\Menu\Models;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MenuContent extends Model
 {
     use SoftDeletes;
 
     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
+     * {@inheritdoc}
      */
-    protected $dates = ['deleted_at'];
+    protected $visible = [
+        'label',
+        'type',
+        'url',
+        'icon',
+        'children',
+    ];
 
     /**
-     * setConnection driver.
-     *
-     * @var array
+     * {@inheritdoc}
+     */
+    protected $appends = [
+        'icon',
+    ];
+
+    /**
+     * {@inheritdoc}
      */
     public function getConnectionName()
     {
@@ -29,65 +42,61 @@ class MenuContent extends Model
     /**
      * Many to Many relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class);
-    }
-
-    /**
-     * One to Many relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function parent()
-    {
-        return $this->hasOne(self::class, 'id', 'parent_id')->orderBy('sort');
-    }
-
-    /**
-     * Make tree Menu.
-     *
-     * @return data type
-     */
-    public function children()
-    {
-        return $this->hasMany(self::class, 'parent_id', 'id')->orderBy('sort');
-    }
-
-    /**
-     * Many to Many relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function language()
+    public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class, 'lang');
     }
 
     /**
-     * Many to Many relation.
+     * May has many children.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function contents()
+    public function children(): HasMany
     {
-        return $this->belongsTo(Menu::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id', 'menu_id')
+            ->where('active', true)
+            ->orderBy('sort');
     }
 
-    public function getUrlAttribute($value)
+    /**
+     * Get active menu content that has no parent (it's root!).
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string                                $locale
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveRoot(Builder $builder, string $locale): Builder
     {
-        if ($this->attributes['type'] === 'external_link') {
-            $data = $value;
-        } else {
-            $data = url($value);
-        }
-        return $data;
+        return $builder->whereNull('parent_id')
+            ->where('active', true)
+            ->whereHas('language', function ($query) use ($locale) {
+                return $query->where('key', $locale);
+            });
     }
 
-    public function setUrlAttribute($value)
+    /**
+     * Get icon attribute (computed).
+     *
+     * @return string|null
+     */
+    protected function getIconAttribute(): ?string
     {
-        $this->attributes['url'] = $value;
+        return $this->featured_image;
+    }
+
+    /**
+     * Get featured image attribute.
+     *
+     * @param string|null $value
+     *
+     * @return string|null
+     */
+    protected function getFeaturedImageAttribute(?string $value): ?string
+    {
+        return is_null($value) ? null : URL::cms('/storage/images/'.$value);
     }
 }

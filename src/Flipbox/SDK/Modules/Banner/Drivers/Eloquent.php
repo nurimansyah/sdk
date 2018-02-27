@@ -2,74 +2,31 @@
 
 namespace Flipbox\SDK\Modules\Banner\Drivers;
 
-use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 use Flipbox\SDK\Modules\Banner\Models\Banner;
 use Flipbox\SDK\Modules\Banner\Models\BannerContent;
+use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 
 class Eloquent implements BannerDriver
 {
     /**
-     * Please describe process of this method.
+     * Fetch all banners.
      *
-     * @param param type $param
-     * @return data type
-     */
-    public function all()
-    {
-        $collection = BannerContent::whereHas('language', function ($query) {
-            return $query->where('key', 'id');
-        })
-        ->get()->toArray();
-        
-        return $collection;
-    }
-
-    /**
-     * Get all menu collection.
+     * @param string $locale
      *
-     * @param param type $param
-     * @return array collection
-     */
-    public function search($param = [])
-    {
-        $collection = BannerContent::whereHas('language', function ($query) use ($param) {
-            if ($param['lang']) {
-                $query->where('key', $param['lang']);
-            } else {
-                $query->where('key', 'id');
-            }
-
-            if ($param['search']) {
-                $query->where('banner_contents.title', 'like', "%{$param['search']}%");
-            }
-            return $query;
-
-        })->get();
-        
-        return $collection->toArray();
-    }
-
-    /**
-     * Get banner by param.
-     *
-     * @param  string  $param
      * @return array
      */
-    public function find(string $param)
+    public function all(string $locale = ''): array
     {
-        $collection = BannerContent::where('btn_url', $param)->get()->toArray();
+        $collection = BannerContent::where('active', true)
+            ->whereHas('banner', function ($query) {
+                $query->whereRaw('? BETWEEN `start_date` AND `end_date`', [date('Y-m-d')]);
+            })
+            ->whereHas('language', function ($query) use ($locale) {
+                return $query->where('key', $locale);
+            })
+            ->get()
+            ->sortBy('banner.sort');
 
-        if (count($collection) < 1) {
-            $collection = [
-                'error' => [
-                    'code' => 404,
-                    'message' => 'Oops'
-                ] 
-            ];
-        }
-        
-        return $collection;
+        return array_values($collection->toArray());
     }
-
-
 }

@@ -5,27 +5,11 @@ namespace Flipbox\SDK\Modules\Banner\Contracts;
 interface BannerDriver
 {
     /**
-     * fetch All Banner
+     * Fetch all banners.
      *
-     * @return string|array
+     * @param string $locale
+     *
+     * @return array
      */
-    public function all();
-
-    /**
-     * search All Banner
-     *
-     * @param string|array $request
-     *
-     * @return string|array
-     */
-    public function search($request = null);
-
-    /**
-     * search All Banner
-     *
-     * @param string|array $request
-     *
-     * @return string|array
-     */
-    public function find(string $param);
+    public function all(string $locale = ''): array;
 }

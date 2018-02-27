@@ -40,74 +40,28 @@ if (!function_exists('translate')) {
 
 if (!function_exists('menu')) {
     /**
-     * Translate a key.
+     * Get all menu.
      *
-     * @param string       $key
-     * @param string|array $default
-     * @param string       $locale
+     * @param string $locale
      *
-     * @return string|array
+     * @return array
      */
-    function menu()
+    function menu(string $locale = ''): array
     {
-        return sdk('menu')->all();
-    }
-}
-
-if (!function_exists('searchMenu')) {
-    /**
-     * search a all menu.
-     *
-     * @param string|array $default
-     *
-     * @return string|array
-     */
-    function searchMenu($default = null)
-    {
-        return sdk('menu')->search($default);
+        return sdk('menu')->all($locale);
     }
 }
 
 if (!function_exists('banner')) {
     /**
-     * get all banner a key.
+     * Get all banner.
      *
-     * @param string       $key
-     * @param string|array $default
-     * @param string       $locale
+     * @param string $locale
      *
-     * @return string|array
+     * @return array
      */
-    function banner()
+    function banner(string $locale = ''): array
     {
-        return sdk('banner')->all();
-    }
-}
-
-if (!function_exists('searchBanner')) {
-    /**
-     * search a all banner.
-     *
-     * @param string|array $default
-     *
-     * @return string|array
-     */
-    function searchBanner($default = null)
-    {
-        return sdk('banner')->search($default);
-    }
-}
-
-if (!function_exists('findBanner')) {
-    /**
-     * find by banner by parameter.
-     *
-     * @param string $findBanner
-     *
-     * @return object
-     */
-    function findBanner($param)
-    {
-        return sdk('banner')->find($param);
+        return sdk('banner')->all($locale);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Flipbox\SDK\Modules\Translation;
 
+use Flipbox\SDK\Modules\Module as BaseModule;
 use Flipbox\SDK\Contracts\Module as ModuleContract;
 use Flipbox\SDK\Modules\Translation\Contracts\TranslationDriver;
 
-class Module implements ModuleContract
+class Module extends BaseModule implements ModuleContract
 {
     /**
      * Driver.
@@ -25,9 +26,9 @@ class Module implements ModuleContract
      */
     public function translate(string $key, $default = null, string $locale = '')
     {
-        $locale = $locale ?: $this->getLocaleFromSession();
-
-        return $this->driver()->translate($key, $locale, $default);
+        return $this->driver()->translate(
+            $key, $this->determineLocale($locale), $default
+        );
     }
 
     /**
@@ -77,19 +78,5 @@ class Module implements ModuleContract
         Drivers\Eloquent::$translated = [];
 
         return $this;
-    }
-
-    /**
-     * Get locale from session.
-     *
-     * @return string
-     */
-    protected function getLocaleFromSession(): ?string
-    {
-        return app('session')
-            ->get(
-                config('flipbox-sdk.modules.translation.session'),
-                config('app.locale', config('app.fallback_locale'))
-            );
     }
 }

@@ -2,22 +2,23 @@
 
 namespace Flipbox\SDK\Modules\Banner;
 
+use Flipbox\SDK\Modules\Module as BaseModule;
 use Flipbox\SDK\Contracts\Module as ModuleContract;
 use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 
-class Module implements ModuleContract
+class Module extends BaseModule implements ModuleContract
 {
     /**
      * Driver.
      *
-     * @var TranslationDriver
+     * @var BannerDriver
      */
     protected $driver;
 
     /**
      * Create driver.
      *
-     * @return TranslationDriver
+     * @return BannerDriver
      */
     public function driver(): BannerDriver
     {
@@ -31,37 +32,18 @@ class Module implements ModuleContract
     }
 
     /**
-     * Please describe process of this method.
+     * Fetch all banners.
      *
-     * @param param type $param
-     * @return data type
+     * @param string $locale
+     *
+     * @return array
      */
-    public function all()
+    public function all(string $locale = ''): array
     {
-        return $this->driver()->all();
+        return $this->driver()->all(
+            $this->determineLocale($locale)
+        );
     }
-
-    /**
-     * Please describe process of this method.
-     *
-     * @param param type $param
-     * @return data type
-     */
-    public function search($request = null)
-    {
-        return $this->driver()->search($request);
-    }
-
-    /**
-     * Please describe process of this method.
-     *
-     * @param param type $param
-     * @return data type
-     */
-    public function find(string $param)
-    {
-        return $this->driver()->find($param);
-    }    
 
     /**
      * Clear resolved driver, force to re-create when needed.

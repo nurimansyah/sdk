@@ -2,10 +2,11 @@
 
 namespace Flipbox\SDK\Modules\Menu;
 
-use Flipbox\SDK\Contracts\Module as ModuleContract;
+use Flipbox\SDK\Modules\Module as BaseModule;
 use Flipbox\SDK\Modules\Menu\Contracts\MenuDriver;
+use Flipbox\SDK\Contracts\Module as ModuleContract;
 
-class Module implements ModuleContract
+class Module extends BaseModule implements ModuleContract
 {
     /**
      * Driver.
@@ -33,23 +34,15 @@ class Module implements ModuleContract
     /**
      * Please describe process of this method.
      *
-     * @param param type $param
-     * @return data type
-     */
-    public function all()
-    {
-        return $this->driver()->all();
-    }
-
-    /**
-     * Please describe process of this method.
+     * @param string $locale
      *
-     * @param param type $param
-     * @return data type
+     * @return array
      */
-    public function search($request = null)
+    public function all(string $locale = ''): array
     {
-        return $this->driver()->search($request);
+        return $this->driver()->all(
+            $this->determineLocale($locale)
+        );
     }
 
     /**

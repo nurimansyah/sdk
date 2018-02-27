@@ -4,13 +4,56 @@ namespace Feature\Banner\Tests;
 
 use Tests\TestCase;
 use Flipbox\SDK\Factory;
+use Flipbox\SDK\Facades\SDK;
 use Flipbox\SDK\Modules\Banner\Module;
-use Flipbox\SDK\Modules\Banner\Drivers\File;
 use Flipbox\SDK\Modules\Banner\Drivers\Eloquent;
 use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 
 class BannerTest extends TestCase
 {
+    public function testFactoryCanCreateModuleUsingFacades()
+    {
+        $this->checkModule(
+            SDK::banner()
+        );
+
+        $this->checkModule(
+            SDK::resolve('banner')
+        );
+
+        $this->checkModule(
+            sdk('banner')
+        );
+    }
+
+    public function testFactoryCanCreateModuleUsingMethodAccessor()
+    {
+        $module = $this->app->make(Factory::class)->banner();
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingArrayAccess()
+    {
+        $module = $this->app->make(Factory::class)['banner'];
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingObjectAccessor()
+    {
+        $module = $this->app->make(Factory::class)->banner;
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingHelper()
+    {
+        $module = sdk('banner');
+
+        $this->checkModule($module);
+    }
+
     public function testDefaultBannerDriverIsEloquent()
     {
         $module = $this->bootEloquentDriver();
@@ -24,18 +67,6 @@ class BannerTest extends TestCase
             Eloquent::class,
             $module->driver()
         );
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testEloquentDriverThrowsExceptionWhenConnectionConfigurationIsNotPresent()
-    {
-        $this->app->config->set('flipbox-sdk.modules.banner.drivers.eloquent.connection', 'undefined');
-
-        $module = $this->bootEloquentDriver();
-
-        $module->all();
     }
 
     public function testBasicBannerUsingEloquentDriver()
@@ -61,10 +92,8 @@ class BannerTest extends TestCase
         return $this->bootDriver();
     }
 
-    protected function bootDriver(?string $connection = null): Module
+    protected function bootDriver(): Module
     {
-        $this->app->config->set('flipbox-sdk.modules.banner.drivers.eloquent.connection', $connection);
-
         return $this->app->make(Factory::class)
             ->resolve('banner')
             ->clear();
@@ -77,21 +106,14 @@ class BannerTest extends TestCase
 
     protected function checkBanner(Module $module)
     {
-        foreach ($this->getExpectations() as $pairs) {
-            // foreach ($pairs as $key => $result) {
-            //     $default = '';
+        $this->assertEquals(
+            $module->all(),
+            $this->getExpectations()
+        );
+    }
 
-            //     if (is_array($result)) {
-            //         ['result' => $result, 'default' => $default] = $result;
-            //     }
-
-                
-            // }
-            
-            $this->assertEquals(
-                $module->all(),
-                $pairs
-            );
-        }
+    protected function checkModule($module)
+    {
+        $this->assertInstanceOf(Module::class, $module);
     }
 }

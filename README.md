@@ -54,14 +54,19 @@ Here's the basic configuration looks like:
 
 ```php
 return [
+    // CMS hostname, ommit trailing slash to prevent error!
+    'url' => env('FLIPBOX_CMS_URL'),
+
+    'locale' => [
+        // Session name
+        'session' => 'locale',
+    ],
+
     'modules' => [
         'translation' => [
-            // Session name
-            'session' => 'locale',
-
             // Driver configuration
             'drivers' => [
-                // Eloquent driver configuation
+                // Eloquent driver configuration
                 'eloquent' => [
                     // Database connection that eloquent should use
                     'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
@@ -72,11 +77,33 @@ return [
                 ],
             ],
         ],
+
+        'menu' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuration
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
+
+        'banner' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuration
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
     ],
-];
+]
 ```
 
-I'll explain this configuration later.
+> **HOLD ON** I'll explain this configuration later.
 
 ### TRANSLATION MODULE
 
@@ -186,14 +213,12 @@ When you ommit `$locale` argument, then the package will try to guess your local
 
 ```php
 return [
-    'modules' => [
-        'translation' => [
-            // Session name
-            'session' => 'custom-locale-session-name',
-
-            // ...
-        ],
+    'locale' => [
+        // Session name
+        'session' => 'custom-locale-session-name',
     ],
+
+    ...
 ];
 ```
 
@@ -240,6 +265,102 @@ If you want to unescape the translation content, you should use `translate` func
 ```
 {!! translate('auth.failed', '<strong>Authentication failed</strong>') !!}
 ```
+
+### MENU MODULE
+
+Another module that comes with this SDK is menu module.
+You can get all active menu with its children using this function:
+
+```php
+$menu = menu(); // guess current locale via session / configuration
+
+// To force using given locale
+$menu = menu('en');
+$menu = menu('id');
+```
+
+Result:
+```php
+[
+    [
+        'label' => 'Foo',
+        'type' => 'internal_link',
+        'url' => '/foo',
+        'icon' => 'https://mitsubishi.test/storage/images/img-menu/K0Dx2VOQhwfFP1AlYgTDbxQnJtWN87u6Ag.png',
+        'children' => [
+            [
+                'label' => 'Bar',
+                'type' => 'internal_link',
+                'url' => '/bar',
+                'icon' => null,
+                'children' => [
+                    [
+                        'label' => 'Baz',
+                        'type' => 'external_link',
+                        'url' => 'https:://baz.com',
+                        'icon' => null,
+                        'children' => [
+                            [
+                                'label' => 'Quux',
+                                'type' => 'external_link',
+                                'url' => 'https:://quux.com',
+                                'icon' => null,
+
+                                'children' => [],
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+]
+```
+
+### BANNER MODULE
+
+Another module that comes with this SDK is a banner module.
+You can get all active banner with its children using this function:
+
+```php
+$banner = banner(); // guess current locale via session / configuration
+
+// To force using given locale
+$banner = banner('en');
+$banner = banner('id');
+```
+
+Result:
+```php
+[
+    [
+        'title' => 'xxx',
+        'url' => null,
+        'btn_url' => 'xxx',
+        'featured_image' => 'https://mitsubishi.test/storage/images/banner/ACE1uu7qZFVmP4fhv3Rx1C4yNpFSEcNfDa.jpg',
+        'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/ptuN8gpfz3oagkRFW2MUefc853EbfoFvwg.jpg',
+        'content' => '<p>xxx</p>',
+        'meta_title' => 'xxx',
+        'meta_description' => 'xxx',
+        'start_date' => '2018-02-27',
+        'end_date' => '2018-04-09',
+    ],
+    [
+        'title' => 'Title',
+        'url' => null,
+        'btn_url' => 'Button',
+        'featured_image' => 'https://mitsubishi.test/storage/images/banner/ERBHN2bNXHg1ddm73O1Uh5F77162PAfc7p.jpg',
+        'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/a6nkAl3kcdDLqLBFXSqP6tyv29RyvWT7K1.jpg',
+        'content' => '<p>English Content</p>',
+        'meta_title' => 'meta',
+        'meta_description' => 'Description',
+        'start_date' => '2018-02-27',
+        'end_date' => '2018-02-28',
+    ],
+]
+```
+
+> **EASY NOW** The banner produced above is already sorted and filtered by given locale. Also, the result is a filtered banner where the date today is in between `start_date` and `end_date`.
 
 ### CONTRIBUTING
 
