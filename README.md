@@ -54,11 +54,13 @@ Here's the basic configuration looks like:
 
 ```php
 return [
+    'locale' => [
+        // Session name
+        'session' => 'locale',
+    ],
+
     'modules' => [
         'translation' => [
-            // Session name
-            'session' => 'locale',
-
             // Driver configuration
             'drivers' => [
                 // Eloquent driver configuation
@@ -72,11 +74,22 @@ return [
                 ],
             ],
         ],
+
+        'menu' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuation
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
     ],
 ];
 ```
 
-I'll explain this configuration later.
+> **HOLD ON** I'll explain this configuration later.
 
 ### TRANSLATION MODULE
 
@@ -186,14 +199,12 @@ When you ommit `$locale` argument, then the package will try to guess your local
 
 ```php
 return [
-    'modules' => [
-        'translation' => [
-            // Session name
-            'session' => 'custom-locale-session-name',
-
-            // ...
-        ],
+    'locale' => [
+        // Session name
+        'session' => 'custom-locale-session-name',
     ],
+
+    ...
 ];
 ```
 
@@ -240,6 +251,59 @@ If you want to unescape the translation content, you should use `translate` func
 ```
 {!! translate('auth.failed', '<strong>Authentication failed</strong>') !!}
 ```
+
+### MENU MODULE
+
+Another module that comes with this SDK is menu module.
+You can get all active menu with its children using this function:
+
+```php
+$menu = menu(); // guess current locale via session / configuration
+
+// To force using given locale
+$menu = menu('en');
+$menu = menu('id');
+```
+
+Result:
+```php
+[
+    [
+        'label' => 'Foo',
+        'type' => 'internal_link',
+        'url' => '/foo',
+        'icon' => 'https://mitsubishi.test/storage/images/img-menu/K0Dx2VOQhwfFP1AlYgTDbxQnJtWN87u6Ag.png',
+        'children' => [
+            [
+                'label' => 'Bar',
+                'type' => 'internal_link',
+                'url' => '/bar',
+                'icon' => null,
+                'children' => [
+                    [
+                        'label' => 'Baz',
+                        'type' => 'external_link',
+                        'url' => 'https:://baz.com',
+                        'icon' => null,
+                        'children' => [
+                            [
+                                'label' => 'Quux',
+                                'type' => 'external_link',
+                                'url' => 'https:://quux.com',
+                                'icon' => null,
+
+                                'children' => [],
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+]
+```
+
+> **EASY NOW** The menu produced above is already sorted and filtered by given locale.
 
 ### CONTRIBUTING
 

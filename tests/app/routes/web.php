@@ -22,3 +22,7 @@ Route::get('/lang/{locale}', function (string $locale) {
 
     return redirect()->back();
 });
+
+Route::get('menu', function () {
+    return menu();
+});

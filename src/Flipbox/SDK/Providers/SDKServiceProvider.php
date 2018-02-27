@@ -3,6 +3,7 @@
 namespace Flipbox\SDK\Providers;
 
 use Flipbox\SDK\Factory;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,7 +29,7 @@ class SDKServiceProvider extends ServiceProvider
             __DIR__.'/../../../config/flipbox-sdk.php', 'flipbox-sdk'
         );
 
-        Blade::directive('translate', function ($expression) {
+        Blade::directive('translate', function ($expression): string {
             [$key, $default, $locale] = array_merge(
                 array_map(function (string $string): string {
                     return trim($string);
@@ -37,6 +38,10 @@ class SDKServiceProvider extends ServiceProvider
             );
 
             return "<?php echo e(translate($key, $default, $locale)); ?>";
+        });
+
+        URL::macro('cms', function (string $path): string {
+            return config('flipbox-sdk.url').'/'.ltrim($path, '/');
         });
     }
 
