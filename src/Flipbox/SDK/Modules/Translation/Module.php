@@ -26,9 +26,9 @@ class Module extends BaseModule implements ModuleContract
      */
     public function translate(string $key, $default = null, string $locale = '')
     {
-        $locale = $this->determineLocale($locale);
-
-        return $this->driver()->translate($key, $locale, $default);
+        return $this->driver()->translate(
+            $key, $this->determineLocale($locale), $default
+        );
     }
 
     /**

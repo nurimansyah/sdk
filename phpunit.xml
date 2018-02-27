@@ -18,6 +18,9 @@
         <testsuite name="Feature.Menu">
             <directory suffix="Test.php">./tests/Feature/Menu</directory>
         </testsuite>
+        <testsuite name="Feature.Banner">
+            <directory suffix="Test.php">./tests/Feature/Banner</directory>
+        </testsuite>
         <testsuite name="Browser">
             <directory suffix="Test.php">./tests/Browser</directory>
         </testsuite>

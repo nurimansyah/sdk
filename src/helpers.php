@@ -51,3 +51,17 @@ if (!function_exists('menu')) {
         return sdk('menu')->all($locale);
     }
 }
+
+if (!function_exists('banner')) {
+    /**
+     * Get all banner.
+     *
+     * @param string $locale
+     *
+     * @return array
+     */
+    function banner(string $locale = ''): array
+    {
+        return sdk('banner')->all($locale);
+    }
+}

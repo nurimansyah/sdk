@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Translation extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $table = 'ltm_translations';
 
     /**
-     * Get the current connection name for the model.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getConnectionName()
     {

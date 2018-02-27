@@ -13,6 +13,9 @@ class MenuContent extends Model
 {
     use SoftDeletes;
 
+    /**
+     * {@inheritdoc}
+     */
     protected $visible = [
         'label',
         'type',
@@ -21,14 +24,15 @@ class MenuContent extends Model
         'children',
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     protected $appends = [
         'icon',
     ];
 
     /**
-     * setConnection driver.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     public function getConnectionName()
     {

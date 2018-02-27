@@ -26,3 +26,13 @@ Route::get('/lang/{locale}', function (string $locale) {
 Route::get('menu', function () {
     return menu();
 });
+
+Route::get('banner', function () {
+    return banner();
+});
+
+Route::get('banner-query', function (Request $request) {
+    $param = ['lang' => $request->query('lang'), 'search' => $request->query('search')];
+
+    return searchBanner($param);
+});

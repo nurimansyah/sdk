@@ -1,6 +1,6 @@
 <?php
 
-namespace Flipbox\SDK\Modules\Menu\Models;
+namespace Flipbox\SDK\Modules\Banner\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +11,6 @@ class Language extends Model
      */
     public function getConnectionName()
     {
-        return config('flipbox-sdk.modules.menu.drivers.eloquent.connection', 'cms');
+        return config('flipbox-sdk.modules.banner.drivers.eloquent.connection', 'cms');
     }
 }
