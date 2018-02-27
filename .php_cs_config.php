@@ -7,8 +7,8 @@ $finder = Finder::create()
     ->name('*.php')
     ->in(__DIR__.'/src')
     ->in(__DIR__.'/tests')
-    ->exclude(__DIR__.'/tests/app/bootstrap/cache')
-    ->exclude(__DIR__.'/tests/app/storage/framework/views');
+    ->exclude(__DIR__.'/tests/app/bootstrap/')
+    ->exclude(__DIR__.'/tests/app/storage/framework/views/');
 
 return Config::create()
     ->setRules([

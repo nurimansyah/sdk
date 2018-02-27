@@ -54,6 +54,9 @@ Here's the basic configuration looks like:
 
 ```php
 return [
+    // CMS hostname, ommit trailing slash to prevent error!
+    'url' => env('FLIPBOX_CMS_URL'),
+
     'locale' => [
         // Session name
         'session' => 'locale',
@@ -63,7 +66,7 @@ return [
         'translation' => [
             // Driver configuration
             'drivers' => [
-                // Eloquent driver configuation
+                // Eloquent driver configuration
                 'eloquent' => [
                     // Database connection that eloquent should use
                     'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
@@ -78,7 +81,18 @@ return [
         'menu' => [
             // Driver configuration
             'drivers' => [
-                // Eloquent driver configuation
+                // Eloquent driver configuration
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
+
+        'banner' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuration
                 'eloquent' => [
                     // Database connection that eloquent should use
                     'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
@@ -86,7 +100,7 @@ return [
             ],
         ],
     ],
-];
+]
 ```
 
 > **HOLD ON** I'll explain this configuration later.
@@ -303,7 +317,50 @@ Result:
 ]
 ```
 
-> **EASY NOW** The menu produced above is already sorted and filtered by given locale.
+### BANNER MODULE
+
+Another module that comes with this SDK is a banner module.
+You can get all active banner with its children using this function:
+
+```php
+$banner = banner(); // guess current locale via session / configuration
+
+// To force using given locale
+$banner = banner('en');
+$banner = banner('id');
+```
+
+Result:
+```php
+[
+    [
+        'title' => 'xxx',
+        'url' => null,
+        'btn_url' => 'xxx',
+        'featured_image' => 'https://mitsubishi.test/storage/images/banner/ACE1uu7qZFVmP4fhv3Rx1C4yNpFSEcNfDa.jpg',
+        'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/ptuN8gpfz3oagkRFW2MUefc853EbfoFvwg.jpg',
+        'content' => '<p>xxx</p>',
+        'meta_title' => 'xxx',
+        'meta_description' => 'xxx',
+        'start_date' => '2018-02-27',
+        'end_date' => '2018-04-09',
+    ],
+    [
+        'title' => 'Title',
+        'url' => null,
+        'btn_url' => 'Button',
+        'featured_image' => 'https://mitsubishi.test/storage/images/banner/ERBHN2bNXHg1ddm73O1Uh5F77162PAfc7p.jpg',
+        'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/a6nkAl3kcdDLqLBFXSqP6tyv29RyvWT7K1.jpg',
+        'content' => '<p>English Content</p>',
+        'meta_title' => 'meta',
+        'meta_description' => 'Description',
+        'start_date' => '2018-02-27',
+        'end_date' => '2018-02-28',
+    ],
+]
+```
+
+> **EASY NOW** The banner produced above is already sorted and filtered by given locale. Also, the result is a filtered banner where the date today is in between `start_date` and `end_date`.
 
 ### CONTRIBUTING
 

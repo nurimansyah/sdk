@@ -1,26 +1,26 @@
 <?php
 
-namespace Flipbox\SDK\Modules\Menu;
+namespace Flipbox\SDK\Modules\Banner;
 
 use Flipbox\SDK\Modules\Module as BaseModule;
-use Flipbox\SDK\Modules\Menu\Contracts\MenuDriver;
 use Flipbox\SDK\Contracts\Module as ModuleContract;
+use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 
 class Module extends BaseModule implements ModuleContract
 {
     /**
      * Driver.
      *
-     * @var TranslationDriver
+     * @var BannerDriver
      */
     protected $driver;
 
     /**
      * Create driver.
      *
-     * @return TranslationDriver
+     * @return BannerDriver
      */
-    public function driver(): MenuDriver
+    public function driver(): BannerDriver
     {
         if (null !== $this->driver) {
             return $this->driver;
@@ -32,7 +32,7 @@ class Module extends BaseModule implements ModuleContract
     }
 
     /**
-     * Please describe process of this method.
+     * Fetch all banners.
      *
      * @param string $locale
      *
