@@ -11,6 +11,7 @@ class BannerContent extends Model
      * {@inheritdoc}
      */
     protected $visible = [
+        'id',
         'title',
         'url',
         'btn_url',
@@ -57,6 +58,16 @@ class BannerContent extends Model
     public function language()
     {
         return $this->belongsTo(Language::class, 'lang');
+    }
+
+    /**
+     * Get id attribute.
+     *
+     * @return integer
+     */
+    protected function getIdAttribute(): int
+    {
+        return $this->banner->getKey();
     }
 
     /**

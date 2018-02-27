@@ -106,9 +106,21 @@ class BannerTest extends TestCase
 
     protected function checkBanner(Module $module)
     {
+        $expectations = $this->getExpectations();
+
         $this->assertEquals(
             $module->all(),
-            $this->getExpectations()
+            $expectations
+        );
+
+        $this->assertEquals(
+            $module->get(1),
+            collect($expectations)->where('id', 1)->first()
+        );
+
+        $this->assertEquals(
+            $module->get(2),
+            collect($expectations)->where('id', 2)->first()
         );
     }
 

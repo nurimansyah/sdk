@@ -54,14 +54,17 @@ if (!function_exists('menu')) {
 
 if (!function_exists('banner')) {
     /**
-     * Get all banner.
+     * Get banner. Can return multiple or single. Determined by argument data type.
      *
-     * @param string $locale
+     * @param string|int $arg
+     * @param string     $locale
      *
      * @return array
      */
-    function banner(string $locale = ''): array
+    function banner($arg = null, string $locale = null): array
     {
-        return sdk('banner')->all($locale);
+        return (is_int($arg))
+            ? sdk('banner')->get($arg, $locale)
+            : sdk('banner')->all($arg);
     }
 }
