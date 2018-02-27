@@ -9,11 +9,16 @@ use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 class Eloquent implements BannerDriver
 {
     /**
-     * Fetch all banners.
+     * Searchable criteria.
      *
-     * @param string $locale
-     *
-     * @return array
+     * @var array
+     */
+    protected $searchableCriteria = [
+        'title',
+    ];
+
+    /**
+     * {@inheritdoc}
      */
     public function all(string $locale = ''): array
     {
@@ -31,11 +36,7 @@ class Eloquent implements BannerDriver
     }
 
     /**
-     * Get banner specified by id and locale.
-     *
-     * @param integer $id
-     * @param string $locale
-     * @return array
+     * {@inheritdoc}
      */
     public function get(int $id, string $locale = ''): array
     {
@@ -47,5 +48,21 @@ class Eloquent implements BannerDriver
             ->firstOrFail();
 
         return $collection->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function search(array $criteria, string $locale = ''): array
+    {
+        $collection = BannerContent::with(['banner'])
+            ->where(array_only($criteria, $this->searchableCriteria))
+            ->whereHas('language', function ($query) use ($locale) {
+                $query->where('key', $locale);
+            })
+            ->get()
+            ->sortBy('banner.sort');
+
+        return array_values($collection->toArray());
     }
 }

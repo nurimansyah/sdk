@@ -53,6 +53,17 @@ class Module extends BaseModule implements ModuleContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function search(array $criteria, string $locale = ''): array
+    {
+        return $this->driver()->search(
+            $criteria,
+            $this->determineLocale($locale)
+        );
+    }
+
+    /**
      * Clear resolved driver, force to re-create when needed.
      *
      * @return self
