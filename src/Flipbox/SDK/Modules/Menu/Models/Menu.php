@@ -25,14 +25,4 @@ class Menu extends Model
     {
         return config('flipbox-sdk.modules.menu.drivers.eloquent.connection', 'cms');
     }
-
-    /**
-     * One to Many relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function menuContents()
-    {
-        return $this->hasMany(MenuContent::class);
-    }
 }

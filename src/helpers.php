@@ -40,30 +40,14 @@ if (!function_exists('translate')) {
 
 if (!function_exists('menu')) {
     /**
-     * Translate a key.
+     * Get all menu.
      *
-     * @param string       $key
-     * @param string|array $default
-     * @param string       $locale
+     * @param string $locale
      *
-     * @return string|array
+     * @return array
      */
-    function menu()
+    function menu(string $locale = ''): array
     {
-        return sdk('menu')->all();
-    }
-}
-
-if (!function_exists('searchMenu')) {
-    /**
-     * search a all menu.
-     *
-     * @param string|array $default
-     *
-     * @return string|array
-     */
-    function searchMenu($default = null)
-    {
-        return sdk('menu')->search($default);
+        return sdk('menu')->all($locale);
     }
 }

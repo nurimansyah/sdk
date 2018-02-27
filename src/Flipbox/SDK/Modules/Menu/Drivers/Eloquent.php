@@ -2,62 +2,51 @@
 
 namespace Flipbox\SDK\Modules\Menu\Drivers;
 
-use Flipbox\SDK\Modules\Menu\Contracts\MenuDriver;
-use Flipbox\SDK\Modules\Menu\Models\Menu;
+use Illuminate\Database\Eloquent\Collection;
 use Flipbox\SDK\Modules\Menu\Models\MenuContent;
+use Flipbox\SDK\Modules\Menu\Contracts\MenuDriver;
 
 class Eloquent implements MenuDriver
 {
     /**
      * Please describe process of this method.
      *
-     * @param param type $param
-     * @return data type
+     * @param param string $locale
+     *
+     * @return array
      */
-    public function all()
+    public function all(string $locale = null): array
     {
-        $collection = MenuContent::with(['children' => function($query) {
-            $query->with(['children' => function($q) {
-                return $q->with('children');
-            }]);
-        }])
-        ->whereNull('parent_id')
-        ->whereHas('language', function ($query) {
-            return $query->where('key', 'id');
-        })
-        ->get();
-        
-        return $collection->toArray();
+        $collection = MenuContent::activeRoot($locale)->get();
+
+        return $this->collectChildren($collection)->toArray();
     }
 
     /**
-     * Get all menu collection.
+     * Recursively collect all children.
      *
-     * @param param type $param
-     * @return array collection
+     * @param Collection $collection
+     *
+     * @return Collection
      */
-    public function search($param = [])
+    protected function collectChildren(Collection $collection): Collection
     {
-        $collection = MenuContent::with(['children' => function($query) {
-            $query->with(['children' => function($q) {
-                return $q->with('children');
+        foreach ($collection as $index => $menuContent) {
+            $menuContent->load(['children' => function ($query) use ($menuContent) {
+                return $query->whereHas('language', function ($query) use ($menuContent) {
+                    return $query->where('id', $menuContent->lang);
+                });
             }]);
-        }])
-        ->whereNull('parent_id')
-        ->whereHas('language', function ($query) use ($param) {
-            if ($param['lang']) {
-                $query->where('key', $param['lang']);
-            } else {
-                $query->where('key', 'id');
+
+            if (0 === $menuContent->children->count()) {
+                continue;
             }
 
-            if ($param['search']) {
-                $query->where('menu_contents.label', 'like', "%{$param['search']}%");
-            }
-            return $query;
+            $menuContent->children = $this->collectChildren($menuContent->children);
 
-        })->get();
-        
-        return $collection->toArray();
+            $collection[$index] = $menuContent;
+        }
+
+        return $collection;
     }
 }

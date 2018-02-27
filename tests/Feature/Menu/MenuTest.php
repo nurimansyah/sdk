@@ -4,13 +4,56 @@ namespace Feature\Menu\Tests;
 
 use Tests\TestCase;
 use Flipbox\SDK\Factory;
-use Flipbox\SDK\Modules\Menu\Module;
-use Flipbox\SDK\Modules\Menu\Drivers\File;
+use Flipbox\SDK\Facades\SDK;
 use Flipbox\SDK\Modules\Menu\Drivers\Eloquent;
 use Flipbox\SDK\Modules\Menu\Contracts\MenuDriver;
+use Flipbox\SDK\Modules\Menu\Module as MenuModule;
 
 class MenuTest extends TestCase
 {
+    public function testFactoryCanCreateModuleUsingFacades()
+    {
+        $this->checkModule(
+            SDK::menu()
+        );
+
+        $this->checkModule(
+            SDK::resolve('menu')
+        );
+
+        $this->checkModule(
+            sdk('menu')
+        );
+    }
+
+    public function testFactoryCanCreateModuleUsingMethodAccessor()
+    {
+        $module = $this->app->make(Factory::class)->menu();
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingArrayAccess()
+    {
+        $module = $this->app->make(Factory::class)['menu'];
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingObjectAccessor()
+    {
+        $module = $this->app->make(Factory::class)->menu;
+
+        $this->checkModule($module);
+    }
+
+    public function testFactoryCanCreateModuleUsingHelper()
+    {
+        $module = sdk('menu');
+
+        $this->checkModule($module);
+    }
+
     public function testDefaultMenuDriverIsEloquent()
     {
         $module = $this->bootEloquentDriver();
@@ -26,45 +69,31 @@ class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testEloquentDriverThrowsExceptionWhenConnectionConfigurationIsNotPresent()
+    public function testBasic()
     {
-        $this->app->config->set('flipbox-sdk.modules.menu.drivers.eloquent.connection', 'undefined');
-
         $module = $this->bootEloquentDriver();
+        $menus = $module->all();
 
-        $module->all();
+        $this->assertTrue(is_array($menus));
+
+        $this->assertEquals($menus, $this->getExpectations());
     }
 
-    public function testBasicMenuUsingEloquentDriver()
+    protected function checkModule($module)
     {
-        $module = $this->bootEloquentDriver();
-
-        $this->checkMenu($module);
-    }
-
-    public function testEloquentDriverMayReturnCollection()
-    {
-        $module = $this->bootEloquentDriver();
-
-        $this->assertTrue(
-            is_array(
-                $module->all()
-            )
+        $this->assertInstanceOf(
+            MenuModule::class,
+            $module
         );
     }
 
-    protected function bootEloquentDriver(): Module
+    protected function bootEloquentDriver(): MenuModule
     {
         return $this->bootDriver();
     }
 
-    protected function bootDriver(?string $connection = null): Module
+    protected function bootDriver(): MenuModule
     {
-        $this->app->config->set('flipbox-sdk.modules.menu.drivers.eloquent.connection', $connection);
-
         return $this->app->make(Factory::class)
             ->resolve('menu')
             ->clear();
@@ -73,23 +102,5 @@ class MenuTest extends TestCase
     protected function getExpectations()
     {
         return require __DIR__.'/../../expectations/menu.expectation.php';
-    }
-
-    protected function checkMenu(Module $module)
-    {
-        foreach ($this->getExpectations() as $pairs) {
-            foreach ($pairs as $key => $result) {
-                $default = '';
-
-                if (is_array($result)) {
-                    ['result' => $result, 'default' => $default] = $result;
-                }
-
-                $this->assertEquals(
-                    $module->all(),
-                    $result
-                );
-            }
-        }
     }
 }

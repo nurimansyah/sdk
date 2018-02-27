@@ -1,11 +1,16 @@
 <?php
 
 return [
+    // CMS hostname, ommit trailing slash to prevent error!
+    'url' => env('FLIPBOX_CMS_URL'),
+
+    'locale' => [
+        // Session name
+        'session' => 'locale',
+    ],
+
     'modules' => [
         'translation' => [
-            // Session name
-            'session' => 'locale',
-
             // Driver configuration
             'drivers' => [
                 // Eloquent driver configuation
@@ -19,6 +24,7 @@ return [
                 ],
             ],
         ],
+
         'menu' => [
             // Driver configuration
             'drivers' => [

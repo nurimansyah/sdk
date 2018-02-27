@@ -15,8 +15,4 @@ class Language extends Model
     {
         return config('flipbox-sdk.modules.menu.drivers.eloquent.connection', 'cms');
     }
-
-    protected $hidden = [
-        'created_at', 'updated_at',
-    ];
 }

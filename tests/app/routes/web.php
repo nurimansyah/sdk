@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,11 +23,6 @@ Route::get('/lang/{locale}', function (string $locale) {
     return redirect()->back();
 });
 
-Route::get('menu', function() {
-	return menu();
-});
-
-Route::get('menu-query', function(Request $request) {
-	$param = ['lang' => $request->query('lang'), 'search' => $request->query('search')];
-	return searchMenu($param);
+Route::get('menu', function () {
+    return menu();
 });
