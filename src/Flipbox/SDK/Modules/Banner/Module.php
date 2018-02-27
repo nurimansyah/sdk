@@ -32,15 +32,22 @@ class Module extends BaseModule implements ModuleContract
     }
 
     /**
-     * Fetch all banners.
-     *
-     * @param string $locale
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function all(string $locale = ''): array
     {
         return $this->driver()->all(
+            $this->determineLocale($locale)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(int $id, string $locale = ''): array
+    {
+        return $this->driver()->get(
+            $id,
             $this->determineLocale($locale)
         );
     }

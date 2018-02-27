@@ -334,6 +334,7 @@ Result:
 ```php
 [
     [
+        'id' => 2,
         'title' => 'xxx',
         'url' => null,
         'btn_url' => 'xxx',
@@ -346,6 +347,7 @@ Result:
         'end_date' => '2018-04-09',
     ],
     [
+        'id' => 1,
         'title' => 'Title',
         'url' => null,
         'btn_url' => 'Button',
@@ -361,6 +363,44 @@ Result:
 ```
 
 > **EASY NOW** The banner produced above is already sorted and filtered by given locale. Also, the result is a filtered banner where the date today is in between `start_date` and `end_date`.
+
+Or you can get banner specified by its `ID`, by passing the first argument using integer data type:
+
+```php
+$banner = banner(1); // get banner with ID 1, it will guess your current locale
+
+// To force using a specified locale
+$banner = banner(1, 'en');
+```
+
+Result:
+```php
+[
+    'id' => 2,
+    'title' => 'xxx',
+    'url' => null,
+    'btn_url' => 'xxx',
+    'featured_image' => 'https://mitsubishi.test/storage/images/banner/ACE1uu7qZFVmP4fhv3Rx1C4yNpFSEcNfDa.jpg',
+    'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/ptuN8gpfz3oagkRFW2MUefc853EbfoFvwg.jpg',
+    'content' => '<p>xxx</p>',
+    'meta_title' => 'xxx',
+    'meta_description' => 'xxx',
+    'start_date' => '2018-02-27',
+    'end_date' => '2018-04-09',
+]
+```
+
+> **NOTICE** You **MUST** pass an integer value to the first argument if you want to get a specific banner by its ID. If you pass a string, the method will treat your first argument as `locale`.
+
+If you doubt, you can still access the lower level method to avoid type juggling:
+
+```php
+// Get banner by its id and locale, you can ommit the second argument to autoguess current locale
+$banner = sdk('banner')->get($id, $locale);
+
+// Get all banner with a specific locale, you can ommit the first argument to autoguess current locale
+$banner = sdk('banner')->all($locale);
+```
 
 ### CONTRIBUTING
 

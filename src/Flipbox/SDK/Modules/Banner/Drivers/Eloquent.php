@@ -22,11 +22,30 @@ class Eloquent implements BannerDriver
                 $query->whereRaw('? BETWEEN `start_date` AND `end_date`', [date('Y-m-d')]);
             })
             ->whereHas('language', function ($query) use ($locale) {
-                return $query->where('key', $locale);
+                $query->where('key', $locale);
             })
             ->get()
             ->sortBy('banner.sort');
 
         return array_values($collection->toArray());
+    }
+
+    /**
+     * Get banner specified by id and locale.
+     *
+     * @param integer $id
+     * @param string $locale
+     * @return array
+     */
+    public function get(int $id, string $locale = ''): array
+    {
+        $collection = BannerContent::with(['banner'])
+            ->where('banner_id', $id)
+            ->whereHas('language', function ($query) use ($locale) {
+                $query->where('key', $locale);
+            })
+            ->firstOrFail();
+
+        return $collection->toArray();
     }
 }
