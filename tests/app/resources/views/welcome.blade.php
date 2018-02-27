@@ -65,7 +65,7 @@
         <div class="flex-center position-ref full-height">
             <div class="content">
                 @php
-                    $sessionName = config('flipbox-sdk.modules.translation.session');
+                    $sessionName = config('flipbox-sdk.locale.session');
                     $currentLocale = session($sessionName, config('app.locale', config('app.fallback_locale')));
                 @endphp
                 <div class="top-right links">

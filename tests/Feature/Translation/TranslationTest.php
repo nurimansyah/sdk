@@ -1,16 +1,61 @@
 <?php
 
-namespace Feature\Tests;
+namespace Feature\Translation\Tests;
 
 use Tests\TestCase;
 use Flipbox\SDK\Factory;
+use Flipbox\SDK\Facades\SDK;
 use Flipbox\SDK\Modules\Translation\Module;
 use Flipbox\SDK\Modules\Translation\Drivers\File;
 use Flipbox\SDK\Modules\Translation\Drivers\Eloquent;
 use Flipbox\SDK\Modules\Translation\Contracts\TranslationDriver;
+use Flipbox\SDK\Modules\Translation\Module as TranslationModule;
 
 class TranslationTest extends TestCase
 {
+    public function testFactoryCanCreateModuleUsingFacades()
+    {
+        $this->checkTranslationModule(
+            SDK::translation()
+        );
+
+        $this->checkTranslationModule(
+            SDK::resolve('translation')
+        );
+
+        $this->checkTranslationModule(
+            sdk('translation')
+        );
+    }
+
+    public function testFactoryCanCreateModuleUsingMethodAccessor()
+    {
+        $translationModule = $this->app->make(Factory::class)->translation();
+
+        $this->checkTranslationModule($translationModule);
+    }
+
+    public function testFactoryCanCreateModuleUsingArrayAccess()
+    {
+        $translationModule = $this->app->make(Factory::class)['translation'];
+
+        $this->checkTranslationModule($translationModule);
+    }
+
+    public function testFactoryCanCreateModuleUsingObjectAccessor()
+    {
+        $translationModule = $this->app->make(Factory::class)->translation;
+
+        $this->checkTranslationModule($translationModule);
+    }
+
+    public function testFactoryCanCreateModuleUsingHelper()
+    {
+        $translationModule = sdk('translation');
+
+        $this->checkTranslationModule($translationModule);
+    }
+
     public function testDefaultTranslationDriverIsEloquent()
     {
         $module = $this->bootEloquentDriver();
@@ -143,6 +188,14 @@ class TranslationTest extends TestCase
         }
     }
 
+    protected function checkTranslationModule($translationModule)
+    {
+        $this->assertInstanceOf(
+            TranslationModule::class,
+            $translationModule
+        );
+    }
+
     protected function bootEloquentDriver(): Module
     {
         return $this->bootFileDriver(null);
@@ -159,7 +212,7 @@ class TranslationTest extends TestCase
 
     protected function getExpectations()
     {
-        return require __DIR__.'/../expectations/translation.expectation.php';
+        return require __DIR__.'/../../expectations/translation.expectation.php';
     }
 
     protected function checkTranslation(Module $module)
@@ -184,7 +237,7 @@ class TranslationTest extends TestCase
     {
         foreach ($this->getExpectations() as $locale => $pairs) {
             $this->app->make('session')->put(
-                $this->app->config->get('flipbox-sdk.modules.translation.session'),
+                $this->app->config->get('flipbox-sdk.locale.session'),
                 $locale
             );
 
@@ -225,7 +278,7 @@ class TranslationTest extends TestCase
     {
         foreach ($this->getExpectations() as $locale => $pairs) {
             $this->app->make('session')->put(
-                $this->app->config->get('flipbox-sdk.modules.translation.session'),
+                $this->app->config->get('flipbox-sdk.locale.session'),
                 $locale
             );
 

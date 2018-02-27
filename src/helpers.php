@@ -37,3 +37,17 @@ if (!function_exists('translate')) {
         return sdk('translation')->translate($key, $default, $locale);
     }
 }
+
+if (!function_exists('menu')) {
+    /**
+     * Get all menu.
+     *
+     * @param string $locale
+     *
+     * @return array
+     */
+    function menu(string $locale = ''): array
+    {
+        return sdk('menu')->all($locale);
+    }
+}
