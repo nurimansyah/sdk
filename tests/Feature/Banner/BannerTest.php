@@ -122,6 +122,16 @@ class BannerTest extends TestCase
             $module->get(2),
             collect($expectations)->where('id', 2)->first()
         );
+
+        $this->assertEquals(
+            $module->search(['title' => 'Title']),
+            [collect($expectations)->where('id', 1)->first()]
+        );
+
+        $this->assertEquals(
+            $module->search(['title' => 'xxx']),
+            [collect($expectations)->where('id', 2)->first()]
+        );
     }
 
     protected function checkModule($module)

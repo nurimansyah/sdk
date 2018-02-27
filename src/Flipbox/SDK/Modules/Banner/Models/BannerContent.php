@@ -63,7 +63,7 @@ class BannerContent extends Model
     /**
      * Get id attribute.
      *
-     * @return integer
+     * @return int
      */
     protected function getIdAttribute(): int
     {

@@ -22,4 +22,14 @@ interface BannerDriver
      * @return array
      */
     public function get(int $id, string $locale = ''): array;
+
+    /**
+     * Search banner.
+     *
+     * @param array  $criteria
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function search(array $criteria, string $locale = ''): array;
 }

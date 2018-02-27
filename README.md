@@ -402,6 +402,36 @@ $banner = sdk('banner')->get($id, $locale);
 $banner = sdk('banner')->all($locale);
 ```
 
+Another feature you can use to get banner data is by searching its title. Here's the example how to do so:
+
+```php
+$banner = sdk('banner')->search(['title' => 'xxx']); // It will guess the current locale
+
+// To force using a specific locale
+$banner = sdk('banner')->search(['title' => 'xxx'], 'en);
+```
+
+Result:
+```
+[
+    [
+        'id' => 2,
+        'title' => 'xxx',
+        'url' => null,
+        'btn_url' => 'xxx',
+        'featured_image' => 'https://mitsubishi.test/storage/images/banner/ACE1uu7qZFVmP4fhv3Rx1C4yNpFSEcNfDa.jpg',
+        'featured_image_mobile' => 'https://mitsubishi.test/storage/images/banner/ptuN8gpfz3oagkRFW2MUefc853EbfoFvwg.jpg',
+        'content' => '<p>xxx</p>',
+        'meta_title' => 'xxx',
+        'meta_description' => 'xxx',
+        'start_date' => '2018-02-27',
+        'end_date' => '2018-04-09',
+    ]
+]
+```
+
+> **NOTICE** The result is already sorted. Also, for now, you can **ONLY** search banner by title. You may submit new issue if you want to search banner using other field.
+
 ### CONTRIBUTING
 
 `-- TO BE DISCUSSED --`
