@@ -46,5 +46,16 @@ return [
                 ],
             ],
         ],
+
+        'dealer' => [
+            // Driver configuration
+            'drivers' => [
+                // Eloquent driver configuration
+                'eloquent' => [
+                    // Database connection that eloquent should use
+                    'connection' => env('FLIPBOX_CMS_CONNECTION', 'cms'),
+                ],
+            ],
+        ],
     ],
 ];
