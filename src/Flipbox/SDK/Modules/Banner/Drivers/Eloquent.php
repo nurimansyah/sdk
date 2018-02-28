@@ -9,15 +9,6 @@ use Flipbox\SDK\Modules\Banner\Contracts\BannerDriver;
 class Eloquent implements BannerDriver
 {
     /**
-     * Searchable criteria.
-     *
-     * @var array
-     */
-    protected $searchableCriteria = [
-        'title',
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public function all(string $locale = ''): array
@@ -56,7 +47,7 @@ class Eloquent implements BannerDriver
     public function search(array $criteria, string $locale = ''): array
     {
         $collection = BannerContent::with(['banner'])
-            ->where(array_only($criteria, $this->searchableCriteria))
+            ->where($criteria)
             ->whereHas('language', function ($query) use ($locale) {
                 $query->where('key', $locale);
             })

@@ -68,3 +68,20 @@ if (!function_exists('banner')) {
             : sdk('banner')->all($arg);
     }
 }
+
+if (!function_exists('dealer')) {
+    /**
+     * Get dealer. Can return multiple or single. Determined by argument data type.
+     *
+     * @param string|int $arg
+     * @param string     $locale
+     *
+     * @return array
+     */
+    function dealer($arg = null, string $locale = null): array
+    {
+        return (is_int($arg))
+            ? sdk('dealer')->get($arg, $locale)
+            : sdk('dealer')->all($arg);
+    }
+}

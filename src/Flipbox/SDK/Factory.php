@@ -18,6 +18,7 @@ class Factory implements ArrayAccess
         'translation' => Modules\Translation\Module::class,
         'menu' => Modules\Menu\Module::class,
         'banner' => Modules\Banner\Module::class,
+        'dealer' => Modules\Dealer\Module::class,
     ];
 
     /**
